@@ -1,0 +1,9 @@
+{
+  "name": "o-log/php-lib",
+  "description": "Useful PHP libraries",
+  "autoload" : {
+    "psr-0" : {
+      "OLOG" : ""
+    }
+  }
+}

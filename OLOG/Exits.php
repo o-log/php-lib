@@ -77,11 +77,28 @@ class Exits
     {
         header("HTTP/1.1 405 Method Not Allowed");
         if(!empty($allowed_methods_arr)) {
-            Helpers::setAllowedMethodsHeaders($allowed_methods_arr);
+            self::setAllowedMethodsHeaders($allowed_methods_arr);
         }
 
         exit();
     }
 
+    public static function setAllowedMethodsHeaders($allowed_methods_arr)
+    {
+        Assert::assert(is_array($allowed_methods_arr));
+        self::setAccessControlAllowOriginHeader();
 
+        header('Access-Control-Allow-Methods: ' . implode(', ', $allowed_methods_arr));
+        header('Allow: ' . implode(', ', $allowed_methods_arr));
+    }
+
+    public static function setAccessControlAllowOriginHeader()
+    {
+        // TODO: review!
+        $allowed_hosts = \OLOG\ConfWrapper::value('access_control_allow_origin_header', '');
+
+        if($allowed_hosts != '') {
+            header('Access-Control-Allow-Origin: ' . $allowed_hosts);
+        }
+    }
 }

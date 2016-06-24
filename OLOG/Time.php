@@ -3,9 +3,9 @@
 namespace OLOG;
 
 
-class Time
+class HHMMSS
 {
-    public static function time2seconds($time)
+    public static function hhmmss2seconds($time)
     {
         list($hours, $mins, $secs) = explode(':', $time);
         $secs = round($secs);

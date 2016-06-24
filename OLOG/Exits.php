@@ -76,7 +76,7 @@ class Exits
     public static function exit405($allowed_methods_arr = array())
     {
         header("HTTP/1.1 405 Method Not Allowed");
-        if(!empty($allowed_methods_arr)) {
+        if (!empty($allowed_methods_arr)) {
             self::setAllowedMethodsHeaders($allowed_methods_arr);
         }
 
@@ -97,7 +97,7 @@ class Exits
         // TODO: review!
         $allowed_hosts = \OLOG\ConfWrapper::value('access_control_allow_origin_header', '');
 
-        if($allowed_hosts != '') {
+        if ($allowed_hosts != '') {
             header('Access-Control-Allow-Origin: ' . $allowed_hosts);
         }
     }

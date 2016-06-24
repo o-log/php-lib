@@ -6,7 +6,8 @@ class Operations
 {
     const FIELD_NAME_OPERATION_CODE = '_OPERATION_CODE';
 
-    public static function operationCodeHiddenField($operation_code){
+    public static function operationCodeHiddenField($operation_code)
+    {
         return '<input type="hidden" name="' . self::FIELD_NAME_OPERATION_CODE . '" value="' . Sanitize::sanitizeAttrValue($operation_code) . '">';
     }
 

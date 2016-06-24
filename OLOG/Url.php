@@ -4,18 +4,20 @@ namespace OLOG;
 
 class Url
 {
-    static public function getCurrentUrlNoGetForm(){
+    static public function getCurrentUrlNoGetForm()
+    {
         $url = $_SERVER['REQUEST_URI'];
         $no_form = $url;
 
-        if (strpos($url, '?')){
+        if (strpos($url, '?')) {
             list($no_form, $form) = explode('?', $url);
         }
 
         return $no_form;
     }
 
-    static public function getCurrentUrl(){
+    static public function getCurrentUrl()
+    {
         $url = $_SERVER['REQUEST_URI'];
 
         return $url;

@@ -3,7 +3,7 @@
 
 class ConfWrapperTest extends PHPUnit_Framework_TestCase
 {
-    const TEST_CONFIG_ARR = array(
+    const TEST_CONFIG_ARR = array( //@TODO константами
         'first_level_string' => 'string',
         'first_level_arr' => array(
             'second_level_string' => 'string'
@@ -16,7 +16,8 @@ class ConfWrapperTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('string', \OLOG\ConfWrapper::getRequiredValue('first_level_string'));
 
-        $this->setExpectedException('Exception', 'missing config key');
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('missing config key');
 
         \OLOG\ConfWrapper::getRequiredValue('not_existing_key');
     }
@@ -25,7 +26,8 @@ class ConfWrapperTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals('string', \OLOG\ConfWrapper::getRequiredSubvalue(self::TEST_CONFIG_ARR, 'first_level_arr.second_level_string'));
 
-        $this->setExpectedException('Exception', 'missing config key');
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('missing config key');
 
         \OLOG\ConfWrapper::getRequiredSubvalue(self::TEST_CONFIG_ARR, 'first_level_arr.not_existing_key');
     }

@@ -2,11 +2,12 @@
   "name": "o-log/php-lib",
   "description": "Useful PHP libraries",
   "require-dev": {
-    "phpunit/phpunit": "4.8.*"
+    "phpunit/phpunit": "5.*"
   },
   "autoload" : {
     "psr-0" : {
-      "OLOG" : ""
+      "OLOG" : "",
+      "Tests": ""
     }
   }
 }

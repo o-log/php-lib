@@ -7,6 +7,9 @@ class FullObjectIdTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals('not_object', \OLOG\FullObjectId::getFullObjectId(''));
 
-        $this->assertEquals('stdClass', \OLOG\FullObjectId::getFullObjectId(new stdClass()));
+        $id = rand(1,1000);
+        $test_obj = new \Tests\TestObject($id);
+
+        $this->assertEquals(\Tests\TestObject::class . '.' . $id, \OLOG\FullObjectId::getFullObjectId($test_obj));
     }
 }

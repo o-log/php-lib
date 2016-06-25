@@ -3,10 +3,17 @@
 
 class ConfWrapperTest extends PHPUnit_Framework_TestCase
 {
-    const TEST_CONFIG_ARR = array( //@TODO константами
-        'first_level_string' => 'string',
-        'first_level_arr' => array(
-            'second_level_string' => 'string'
+    const TEST_FIRST_LEVEL_STRING_KEY = 'first_level_string';
+    const TEST_SECOND_LEVEL_STRING_KEY = 'second_level_string';
+    const TEST_NOT_EXISTING_KEY = 'not_existing_key';
+    const TEST_FIRST_LEVEL_ARR_KEY = 'first_level_arr';
+    const TEST_VALUE = 'string';
+    const TEST_DEFAULT_VALUE = 'default_value';
+
+    const TEST_CONFIG_ARR = array(
+        self::TEST_FIRST_LEVEL_STRING_KEY => self::TEST_VALUE,
+        self::TEST_FIRST_LEVEL_ARR_KEY => array(
+            self::TEST_SECOND_LEVEL_STRING_KEY => self::TEST_VALUE
         )
     );
 
@@ -14,37 +21,37 @@ class ConfWrapperTest extends PHPUnit_Framework_TestCase
     {
         \OLOG\ConfWrapper::assignConfig(self::TEST_CONFIG_ARR);
 
-        $this->assertEquals('string', \OLOG\ConfWrapper::getRequiredValue('first_level_string'));
+        $this->assertEquals(self::TEST_VALUE, \OLOG\ConfWrapper::getRequiredValue(self::TEST_FIRST_LEVEL_STRING_KEY));
 
         $this->expectException('Exception');
         $this->expectExceptionMessage('missing config key');
 
-        \OLOG\ConfWrapper::getRequiredValue('not_existing_key');
+        \OLOG\ConfWrapper::getRequiredValue(self::TEST_NOT_EXISTING_KEY);
     }
 
     public function testGetRequiredSubValue()
     {
-        $this->assertEquals('string', \OLOG\ConfWrapper::getRequiredSubvalue(self::TEST_CONFIG_ARR, 'first_level_arr.second_level_string'));
+        $this->assertEquals(self::TEST_VALUE, \OLOG\ConfWrapper::getRequiredSubvalue(self::TEST_CONFIG_ARR, self::TEST_FIRST_LEVEL_ARR_KEY . '.' . self::TEST_SECOND_LEVEL_STRING_KEY));
 
         $this->expectException('Exception');
         $this->expectExceptionMessage('missing config key');
 
-        \OLOG\ConfWrapper::getRequiredSubvalue(self::TEST_CONFIG_ARR, 'first_level_arr.not_existing_key');
+        \OLOG\ConfWrapper::getRequiredSubvalue(self::TEST_CONFIG_ARR, self::TEST_FIRST_LEVEL_ARR_KEY . '.' . self::TEST_NOT_EXISTING_KEY);
     }
 
     public function testGetOptionalValue()
     {
         \OLOG\ConfWrapper::assignConfig(self::TEST_CONFIG_ARR);
 
-        $this->assertEquals('string', \OLOG\ConfWrapper::getOptionalValue('first_level_string'));
+        $this->assertEquals(self::TEST_VALUE, \OLOG\ConfWrapper::getOptionalValue(self::TEST_FIRST_LEVEL_STRING_KEY));
 
-        $this->assertEquals('default_value', \OLOG\ConfWrapper::getOptionalValue('first_level_arr.not_existing_key', 'default_value'));
+        $this->assertEquals(self::TEST_DEFAULT_VALUE, \OLOG\ConfWrapper::getOptionalValue(self::TEST_FIRST_LEVEL_ARR_KEY . '.' . self::TEST_NOT_EXISTING_KEY, self::TEST_DEFAULT_VALUE));
     }
 
     public function testGetOptionalSubvalue()
     {
-        $this->assertEquals('default_value', \OLOG\ConfWrapper::getOptionalSubvalue(self::TEST_CONFIG_ARR, 'first_level_arr.not_existing_key', 'default_value'));
+        $this->assertEquals(self::TEST_DEFAULT_VALUE, \OLOG\ConfWrapper::getOptionalSubvalue(self::TEST_CONFIG_ARR, self::TEST_FIRST_LEVEL_ARR_KEY . '.' . self::TEST_NOT_EXISTING_KEY, self::TEST_DEFAULT_VALUE));
 
-        $this->assertEquals('string', \OLOG\ConfWrapper::getOptionalSubvalue(self::TEST_CONFIG_ARR, 'first_level_arr.second_level_string'));
+        $this->assertEquals(self::TEST_VALUE, \OLOG\ConfWrapper::getOptionalSubvalue(self::TEST_CONFIG_ARR, self::TEST_FIRST_LEVEL_ARR_KEY . '.' . self::TEST_SECOND_LEVEL_STRING_KEY));
     }
 }

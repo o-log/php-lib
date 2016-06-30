@@ -47,7 +47,7 @@ class ConfWrapper
             if (isset($value[$part])) {
                 $value = $value[$part];
             } else {
-                throw new \Exception('missing config key');
+                throw new \Exception('missing config key: ' . \OLOG\Sanitize::sanitizeTagContent($path));
             }
         }
 

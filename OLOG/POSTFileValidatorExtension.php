@@ -6,24 +6,7 @@ namespace OLOG;
 
 class POSTFileValidatorExtension implements POSTFileValidatorInterface
 {
-    protected $error_message = '';
     protected $allowed_extensions_arr = [];
-
-    /**
-     * @return string
-     */
-    public function getErrorMessage()
-    {
-        return $this->error_message;
-    }
-
-    /**
-     * @param string $error_message
-     */
-    public function setErrorMessage($error_message)
-    {
-        $this->error_message = $error_message;
-    }
 
     /**
      * @return array
@@ -58,13 +41,13 @@ class POSTFileValidatorExtension implements POSTFileValidatorInterface
      * @param POSTFileAccess $file_obj
      * @return bool
      */
-    public function validate(POSTFileAccess $file_obj)
+    public function validate(POSTFileAccess $file_obj, &$error_message)
     {
         $file_extension = strtolower($file_obj->getExtension());
         $allowed_extentions_arr = $this->getAllowedExtensionsArr();
 
         if (!in_array($file_extension, $allowed_extentions_arr)) {
-            $this->setErrorMessage('Invalid file extension. Must be one of: ' . implode(', ', $allowed_extentions_arr));
+            $error_message = 'Invalid file extension. Must be one of: ' . implode(', ', $allowed_extentions_arr);
             return false;
         }
 

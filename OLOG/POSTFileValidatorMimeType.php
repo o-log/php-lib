@@ -6,24 +6,7 @@ namespace OLOG;
 
 class POSTFileValidatorMimeType implements POSTFileValidatorInterface
 {
-    protected $error_message = '';
     protected $allowed_mime_types_arr = [];
-
-    /**
-     * @return string
-     */
-    public function getErrorMessage()
-    {
-        return $this->error_message;
-    }
-
-    /**
-     * @param string $error_message
-     */
-    public function setErrorMessage($error_message)
-    {
-        $this->error_message = $error_message;
-    }
 
     /**
      * @return array
@@ -54,11 +37,11 @@ class POSTFileValidatorMimeType implements POSTFileValidatorInterface
      * @param POSTFileAccess $file_obj
      * @return bool
      */
-    public function validate(POSTFileAccess $file_obj)
+    public function validate(POSTFileAccess $file_obj, &$error_message)
     {
         $allowed_mime_types_arr = $this->getAllowedMimeTypesArr();
-        if(!in_array($file_obj->getType(), $allowed_mime_types_arr)){
-            $this->setErrorMessage('Invalid file mimetype. Must be one of: ' . implode(', ', $allowed_mime_types_arr));
+        if (!in_array($file_obj->getType(), $allowed_mime_types_arr)) {
+            $error_message = 'Invalid file mimetype. Must be one of: ' . implode(', ', $allowed_mime_types_arr);
             return false;
         }
 

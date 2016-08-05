@@ -6,24 +6,7 @@ namespace OLOG;
 
 class POSTFileValidatorSize implements POSTFileValidatorInterface
 {
-    protected $error_message = '';
     protected $max_file_size_bytes;
-
-    /**
-     * @return string
-     */
-    public function getErrorMessage()
-    {
-        return $this->error_message;
-    }
-
-    /**
-     * @param string $error_message
-     */
-    public function setErrorMessage($error_message)
-    {
-        $this->error_message = $error_message;
-    }
 
     /**
      * @return int
@@ -54,17 +37,15 @@ class POSTFileValidatorSize implements POSTFileValidatorInterface
      * @param POSTFileAccess $file_obj
      * @return bool
      */
-    public function validate(POSTFileAccess $file_obj)
+    public function validate(POSTFileAccess $file_obj, &$error_message)
     {
         $fileSize = $file_obj->getSize();
 
         if ($fileSize > $this->getMaxFileSizeBytes()) {
-            $this->setErrorMessage('File size is too large');
+            $error_message = 'File size is too large';
             return false;
         }
 
         return true;
     }
-
-
 }

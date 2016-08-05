@@ -13,8 +13,9 @@ namespace OLOG;
  *      new \OLOG\POSTFileValidatorSize(20000),
  * ]);
  *
- * if(!$file_access_obj->validate()) {
- *      echo $file->getErrorMessage();
+ * $error_message = '';
+ * if(!$file_access_obj->validate($error_message)) {
+ *      echo $error_message;
  *      return;
  * }
  *
@@ -166,8 +167,9 @@ class POSTFileAccess
             /**
              * @var $validator_obj POSTFileValidatorInterface
              */
-            if ($validator_obj->validate($this) === false) {
-                $this->setErrorMessage($validator_obj->getErrorMessage());
+            $error_message = '';
+            if ($validator_obj->validate($this, $error_message) === false) {
+                $this->setErrorMessage($error_message);
                 return false;
             }
         }

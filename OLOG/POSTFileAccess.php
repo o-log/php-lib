@@ -25,7 +25,6 @@ namespace OLOG;
  * $file_access_obj->getTmpName();
  * $file_access_obj->getUploadErrorCode();
  * $file_access_obj->getSize();
- * $file_access_obj->getSize();
  *
  */
 class POSTFileAccess

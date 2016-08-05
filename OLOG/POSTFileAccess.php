@@ -7,14 +7,14 @@ namespace OLOG;
  *
  * $file_access_obj = new \OLOG\POSTFileAccess('file');
  *
- * $file_access_obj->setValidators([
+ * $validators_arr = [
  *      new \OLOG\POSTFileValidatorMimeType(array('video/mp4', 'video/mpeg')),
  *      new \OLOG\POSTFileValidatorExtension(array('png','jpg','gif')),
  *      new \OLOG\POSTFileValidatorSize(20000),
- * ]);
+ * ];
  *
  * $error_message = '';
- * if(!$file_access_obj->validate($error_message)) {
+ * if(!$file_access_obj->validate($validators_arr, $error_message)) {
  *      echo $error_message;
  *      return;
  * }
@@ -44,8 +44,6 @@ class POSTFileAccess
     protected $tmp_name;
     protected $upload_error_code;
     protected $size;
-    protected $validators_arr = [];
-    protected $error_message = '';
 
     public function __construct($key)
     {
@@ -83,11 +81,6 @@ class POSTFileAccess
         return $this->size;
     }
 
-    public function getValidatorsArr()
-    {
-        return $this->validators_arr;
-    }
-
     public function setName($name)
     {
         $this->name = $name;
@@ -113,62 +106,32 @@ class POSTFileAccess
         $this->size = $size;
     }
 
-    public function setValidatorsArr($validators_arr)
-    {
-        $this->validators_arr = $validators_arr;
-    }
-
-    public function getErrorMessage()
-    {
-        return $this->error_message;
-    }
-
-    public function setErrorMessage($error_message)
-    {
-        $this->error_message = $error_message;
-    }
-
     public function getExtension()
     {
         return strtolower(pathinfo($this->name, PATHINFO_EXTENSION));
     }
-
-    /**
-     * Add file validations
-     * @param array [\OLOG\POSTFileValidatorInterface] $validators_arr
-     */
-    public function setValidators($validators_arr)
+    
+    public function validate($validators_arr, &$error_message)
     {
-        foreach ($validators_arr as $validator_obj) {
-            \OLOG\Assert::assert($validator_obj instanceof POSTFileValidatorInterface);
-        }
-
-        $this->setValidatorsArr($validators_arr);
-    }
-
-    /**
-     * Validate file
-     * @return bool True if valid, false if invalid
-     */
-    public function validate()
-    {
-        if ($this->isOk() === false) {
-            $this->setErrorMessage(self::$errorCodeMessages[$this->getUploadErrorCode()]);
+        if ($this->isOk() == false) {
+            $error_message = self::$errorCodeMessages[$this->getUploadErrorCode()];
             return false;
         }
 
         if ($this->isUploadedFile() === false) {
-            $this->setErrorMessage('The uploaded file was not sent with a POST request');
+            $error_message = 'The uploaded file was not sent with a POST request';
             return false;
         }
 
-        foreach ($this->getValidatorsArr() as $validator_obj) {
+        foreach ($validators_arr as $validator_obj) {
             /**
              * @var $validator_obj POSTFileValidatorInterface
              */
-            $error_message = '';
-            if ($validator_obj->validate($this, $error_message) === false) {
-                $this->setErrorMessage($error_message);
+
+            \OLOG\Assert::assert($validator_obj instanceof POSTFileValidatorInterface);
+            $validator_error_message = '';
+            if ($validator_obj->validate($this, $validator_error_message) === false) {
+                $error_message = $validator_error_message;
                 return false;
             }
         }
@@ -180,7 +143,6 @@ class POSTFileAccess
     {
         return is_uploaded_file($this->getTmpName());
     }
-
 
     public function isOk()
     {

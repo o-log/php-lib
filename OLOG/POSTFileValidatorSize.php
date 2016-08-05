@@ -42,17 +42,12 @@ class POSTFileValidatorSize implements POSTFileValidatorInterface
     }
 
     /**
-     * @param int|string $max_file_size Max file size as an integer (in bytes) or as a human-readable string (e.g. "5M").
-     * @example new \OLOG\POSTFileValidatorSize('10G')
-     * @example new \OLOG\POSTFileValidatorSize('5M')
+     * @param int|string $max_file_size_bytes Max file size as an integer (in bytes).
      * @example new \OLOG\POSTFileValidatorSize(20000)
      */
-    public function __construct($max_file_size)
+    public function __construct($max_file_size_bytes)
     {
-        if (is_string($max_file_size)) {
-            $max_file_size = POSTFileAccess::humanReadableToBytes($max_file_size);
-        }
-        $this->setMaxFileSizeBytes($max_file_size);
+        $this->setMaxFileSizeBytes($max_file_size_bytes);
     }
 
     /**

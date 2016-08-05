@@ -5,29 +5,30 @@ namespace OLOG;
 
 /**
  *
- * $file = new \OLOG\POSTFileAccess('file');
+ * $file_access_obj = new \OLOG\POSTFileAccess('file');
  *
- * $file->setValidators([
- *      new \OLOG\POSTFileValidatorMimeType($allowed_types),
- *      new \OLOG\POSTFileValidatorExtension($allowed_extensions),
- *      new \OLOG\POSTFileValidatorSize('1M'),
+ * $file_access_obj->setValidators([
+ *      new \OLOG\POSTFileValidatorMimeType(array('video/mp4', 'video/mpeg')),
+ *      new \OLOG\POSTFileValidatorExtension(array('png','jpg','gif')),
+ *      new \OLOG\POSTFileValidatorSize(20000),
  * ]);
  *
- * if(!$file->validate()){
+ * if(!$file_access_obj->validate()) {
  *      echo $file->getErrorMessage();
+ *      return;
  * }
- * Class POSTFileAccess
- * @package OLOG
+ *
+ * // Access data about the file that has been uploaded
+ * $file_access_obj->getName();
+ * $file_access_obj->getType();
+ * $file_access_obj->getTmpName();
+ * $file_access_obj->getUploadErrorCode();
+ * $file_access_obj->getSize();
+ * $file_access_obj->getSize();
+ *
  */
 class POSTFileAccess
 {
-    protected static $units = array(
-        'b' => 1,
-        'k' => 1024,
-        'm' => 1048576,
-        'g' => 1073741824
-    );
-
     protected static $errorCodeMessages = array(
         1 => 'The uploaded file exceeds the upload_max_filesize directive in php.ini',
         2 => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form',
@@ -183,21 +184,5 @@ class POSTFileAccess
     public function isOk()
     {
         return ($this->getUploadErrorCode() === UPLOAD_ERR_OK);
-    }
-
-    /**
-     * Convert human readable file size (e.g. "10K" or "3M") into bytes
-     * @param  string $input
-     * @return int
-     */
-    public static function humanReadableToBytes($input)
-    {
-        $number = (int)$input;
-        $unit = strtolower(substr($input, -1));
-        if (isset(self::$units[$unit])) {
-            $number = $number * self::$units[$unit];
-        }
-
-        return $number;
     }
 }

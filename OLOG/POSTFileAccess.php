@@ -119,7 +119,7 @@ class POSTFileAccess
 
     /**
      * Add file validations
-     * @param array [\OLOG\POSTFileValidatorInterface] $validations
+     * @param array [\OLOG\POSTFileValidatorInterface] $validators_arr
      */
     public function setValidators($validators_arr)
     {

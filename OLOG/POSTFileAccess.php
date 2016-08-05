@@ -123,8 +123,8 @@ class POSTFileAccess
      */
     public function setValidators($validators_arr)
     {
-        foreach ($validators_arr as $validator) {
-            \OLOG\Assert::assert($validator instanceof POSTFileValidatorInterface);
+        foreach ($validators_arr as $validator_obj) {
+            \OLOG\Assert::assert($validator_obj instanceof POSTFileValidatorInterface);
         }
 
         $this->setValidatorsArr($validators_arr);
@@ -146,12 +146,12 @@ class POSTFileAccess
             return false;
         }
 
-        foreach ($this->getValidatorsArr() as $validator) {
+        foreach ($this->getValidatorsArr() as $validator_obj) {
             /**
-             * @var $validator POSTFileValidatorInterface
+             * @var $validator_obj POSTFileValidatorInterface
              */
-            if ($validator->validate($this) === false) {
-                $this->setErrorMessage($validator->getErrorMessage());
+            if ($validator_obj->validate($this) === false) {
+                $this->setErrorMessage($validator_obj->getErrorMessage());
                 return false;
             }
         }

@@ -13,8 +13,9 @@ class CheckClassInterfaces
     {
         $model_class_interfaces_arr = class_implements($class_name);
 
-        if (!array_key_exists($interface_class_name, $model_class_interfaces_arr)) {
-            throw new \Exception('Class ' . $class_name . ' does not implement interface ' . $interface_class_name);
-        }
+        $message = 'Class ' . $class_name . ' does not implement interface ' . $interface_class_name;
+
+        \OLOG\Assert::assert($model_class_interfaces_arr, $message);
+        \OLOG\Assert::assert(array_key_exists($interface_class_name, $model_class_interfaces_arr), $message);
     }
 }

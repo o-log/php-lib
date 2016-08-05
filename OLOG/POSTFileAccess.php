@@ -3,7 +3,22 @@
 
 namespace OLOG;
 
-
+/**
+ *
+ * $file = new \OLOG\POSTFileAccess('file');
+ *
+ * $file->setValidators([
+ *      new \OLOG\POSTFileValidatorMimeType($allowed_types),
+ *      new \OLOG\POSTFileValidatorExtension($allowed_extensions),
+ *      new \OLOG\POSTFileValidatorSize('1M'),
+ * ]);
+ *
+ * if(!$file->validate()){
+ *      echo $file->getErrorMessage();
+ * }
+ * Class POSTFileAccess
+ * @package OLOG
+ */
 class POSTFileAccess
 {
     protected static $units = array(

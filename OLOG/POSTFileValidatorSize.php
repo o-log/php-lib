@@ -39,7 +39,7 @@ class POSTFileValidatorSize implements POSTFileValidatorInterface
      */
     public function validate(POSTFileAccess $file_obj, &$error_message)
     {
-        $fileSize = $file_obj->getSize();
+        $fileSize = $file_obj->getFileSize();
 
         if ($fileSize > $this->getMaxFileSizeBytes()) {
             $error_message = 'File size is too large';

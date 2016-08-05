@@ -40,7 +40,7 @@ class POSTFileValidatorMimeType implements POSTFileValidatorInterface
     public function validate(POSTFileAccess $file_obj, &$error_message)
     {
         $allowed_mime_types_arr = $this->getAllowedMimeTypesArr();
-        if (!in_array($file_obj->getType(), $allowed_mime_types_arr)) {
+        if (!in_array($file_obj->getMimeType(), $allowed_mime_types_arr)) {
             $error_message = 'Invalid file mimetype. Must be one of: ' . implode(', ', $allowed_mime_types_arr);
             return false;
         }

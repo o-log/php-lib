@@ -20,11 +20,11 @@ namespace OLOG;
  * }
  *
  * // Access data about the file that has been uploaded
- * $file_access_obj->getName();
- * $file_access_obj->getType();
- * $file_access_obj->getTmpName();
+ * $file_access_obj->getOriginalFileName();
+ * $file_access_obj->getMimeType();
+ * $file_access_obj->getTempFilepath();
  * $file_access_obj->getUploadErrorCode();
- * $file_access_obj->getSize();
+ * $file_access_obj->getFileSize();
  *
  */
 class POSTFileAccess
@@ -39,36 +39,36 @@ class POSTFileAccess
         8 => 'A PHP extension stopped the file upload'
     );
 
-    protected $name;
-    protected $type;
-    protected $tmp_name;
+    protected $original_file_name;
+    protected $mime_type;
+    protected $tmp_file_path;
     protected $upload_error_code;
-    protected $size;
+    protected $file_size;
 
     public function __construct($key)
     {
         \OLOG\Assert::assert(array_key_exists($key, $_FILES));
 
-        $this->name = $_FILES[$key]['name'];
-        $this->type = $_FILES[$key]['type'];
-        $this->tmp_name = $_FILES[$key]['tmp_name'];
-        $this->upload_error_code = $_FILES[$key]['error'];
-        $this->size = $_FILES[$key]['size'];
+        $this->setFileSize($_FILES[$key]['size']);
+        $this->setOriginalFileName($_FILES[$key]['name']);
+        $this->setMimeType($_FILES[$key]['type']);
+        $this->setTempFilepath($_FILES[$key]['tmp_name']);
+        $this->setUploadErrorCode($_FILES[$key]['error']);
     }
 
-    public function getName()
+    public function getOriginalFileName()
     {
-        return $this->name;
+        return $this->original_file_name;
     }
 
-    public function getType()
+    public function getMimeType()
     {
-        return $this->type;
+        return $this->mime_type;
     }
 
-    public function getTmpName()
+    public function getTempFilepath()
     {
-        return $this->tmp_name;
+        return $this->tmp_file_path;
     }
 
     public function getUploadErrorCode()
@@ -76,24 +76,24 @@ class POSTFileAccess
         return $this->upload_error_code;
     }
 
-    public function getSize()
+    public function getFileSize()
     {
-        return $this->size;
+        return $this->file_size;
     }
 
-    public function setName($name)
+    public function setOriginalFileName($original_file_name)
     {
-        $this->name = $name;
+        $this->original_file_name = $original_file_name;
     }
 
-    public function setType($type)
+    public function setMimeType($mime_type)
     {
-        $this->type = $type;
+        $this->mime_type = $mime_type;
     }
 
-    public function setTmpName($tmp_name)
+    public function setTempFilepath($tmp_file_path)
     {
-        $this->tmp_name = $tmp_name;
+        $this->tmp_file_path = $tmp_file_path;
     }
 
     public function setUploadErrorCode($upload_error_code)
@@ -101,16 +101,16 @@ class POSTFileAccess
         $this->upload_error_code = $upload_error_code;
     }
 
-    public function setSize($size)
+    public function setFileSize($file_size)
     {
-        $this->size = $size;
+        $this->file_size = $file_size;
     }
 
     public function getExtension()
     {
-        return strtolower(pathinfo($this->name, PATHINFO_EXTENSION));
+        return strtolower(pathinfo($this->original_file_name, PATHINFO_EXTENSION));
     }
-    
+
     public function validate($validators_arr, &$error_message)
     {
         if ($this->isOk() == false) {
@@ -141,7 +141,7 @@ class POSTFileAccess
 
     public function isUploadedFile()
     {
-        return is_uploaded_file($this->getTmpName());
+        return is_uploaded_file($this->getTempFilepath());
     }
 
     public function isOk()

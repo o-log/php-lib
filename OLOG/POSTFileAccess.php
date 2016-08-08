@@ -7,7 +7,7 @@ namespace OLOG;
  * Класс представляет собой обёртку для работы с закачиваемыми на сервер файлами.
  *
  * Доступа к одному файлу с ключем(имя input поля типа file в html форме) 'upload_file':
- * $file_access_obj = new \OLOG\POSTFileAccess('upload_file');
+ * $file_access_obj = \OLOG\POSTFileAccess::createObjByKey('upload_file');
  *
  * Во время инициализации объекта для этого файла проверяются:
  *      - не произошло ли ошибок при закачке файла
@@ -72,15 +72,14 @@ class POSTFileAccess
      * @param $key
      * @return POSTFileAccess
      */
-    public function __construct($key)
+    public static function createObjByKey($key)
     {
-        if ($key === null) {
-            return;
-        }
-
         \OLOG\Assert::assert(array_key_exists($key, $_FILES));
         \OLOG\Assert::assert(!is_array($_FILES[$key]['name']), 'multi file upload');
-        $this->loadObjFromArray($_FILES[$key]);
+
+        $obj = new self();
+        $obj->loadObjFromArray($_FILES[$key]);
+        return $obj;
     }
 
     /**
@@ -94,7 +93,8 @@ class POSTFileAccess
         $file_post_arr = $_FILES[$key];
         $post_file_access_arr = [];
         if (!is_array($file_post_arr['name'])) {
-            $obj = new self($key);
+            $obj = new self();
+            $obj->loadObjFromArray($file_post_arr);
             return [$obj];
         }
 
@@ -107,7 +107,7 @@ class POSTFileAccess
                 $file_arr[$key] = $file_post_arr[$key][$i];
             }
 
-            $obj = new self(null);
+            $obj = new self();
             $obj->loadObjFromArray($file_arr);
 
             $post_file_access_arr[] = $obj;

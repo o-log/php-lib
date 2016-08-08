@@ -4,28 +4,49 @@
 namespace OLOG;
 
 /**
+ * Класс представляет собой обёртку для работы с закачиваемыми на сервер файлами.
  *
- * $file_access_obj = new \OLOG\POSTFileAccess('file');
+ * Доступа к одному файлу с ключем(имя input поля типа file в html форме) 'upload_file':
+ * $file_access_obj = new \OLOG\POSTFileAccess('upload_file');
  *
+ * Во время инициализации объекта для этого файла проверяются:
+ *  -   не произолшло ли ошибок при закачке файла
+ *  -   является ли этот файл загруженным
+ * в случае ошибки выбрасывается исключение.
+ *
+ *
+ * Над загруженным файлом можно произвести проверки:
  * $validators_arr = [
- *      new \OLOG\POSTFileValidatorMimeType(array('video/mp4', 'video/mpeg')),
- *      new \OLOG\POSTFileValidatorExtension(array('png','jpg','gif')),
- *      new \OLOG\POSTFileValidatorSize(20000),
+ *      new \OLOG\POSTFileValidatorMimeType(array('video/mp4', 'video/mpeg')), // валидация на разрешенные mime типы
+ *      new \OLOG\POSTFileValidatorExtension(array('png','jpg','gif')), // валидация на расширение файла
+ *      new \OLOG\POSTFileValidatorSize(20000), // валидация максимального размера файла
  * ];
  *
  * $error_message = '';
  * if(!$file_access_obj->validate($validators_arr, $error_message)) {
  *      echo $error_message;
- *      return;
  * }
  *
- * // Access data about the file that has been uploaded
- * $file_access_obj->getOriginalFileName();
- * $file_access_obj->getMimeType();
- * $file_access_obj->getTempFilepath();
- * $file_access_obj->getUploadErrorCode();
- * $file_access_obj->getFileSize();
+ * Доступ с свойставм загруженнго файла:
+ *  $file_access_obj->getOriginalFileName();
+ *  $file_access_obj->getMimeType();
+ *  $file_access_obj->getTempFilepath();
+ *  $file_access_obj->getUploadErrorCode();
+ *  $file_access_obj->getFileSize();
  *
+ *
+ * Если в форме ожидается массив файлов с ключем 'upload_files', получить массив объектов POSTFileAccess, над которыми можно будет проводить все те же проверки и получать доступ к свойстам, что выше:
+ *
+ * $file_arr = \OLOG\POSTFileAccess::getPOSTFileObjArr('upload_files');
+ * foreach ($file_arr as $file_access_obj) {
+ *      $valid = $file->validate($validators, $error_message);
+ *
+ *      $file_access_obj->getOriginalFileName();
+ *      $file_access_obj->getMimeType();
+ *      $file_access_obj->getTempFilepath();
+ *      $file_access_obj->getUploadErrorCode();
+ *      $file_access_obj->getFileSize();
+ * }
  */
 class POSTFileAccess
 {
@@ -49,26 +70,30 @@ class POSTFileAccess
      * @param $key
      * @return POSTFileAccess
      */
-    public static function factory($key)
+    public function __construct($key)
     {
+        if ($key === null) {
+            return;
+        }
+
         \OLOG\Assert::assert(array_key_exists($key, $_FILES));
         \OLOG\Assert::assert(!is_array($_FILES[$key]['name']), 'multi file upload');
-        $obj = self::createObjFromArray($_FILES[$key]);
-        return $obj;
+        $this->loadObjFromArray($_FILES[$key]);
     }
 
     /**
      * @param $key
      * @return array[POSTFileAccess]
      */
-    public static function factoryArray($key)
+    public static function getPOSTFileObjArr($key)
     {
         \OLOG\Assert::assert(array_key_exists($key, $_FILES));
 
         $file_post_arr = $_FILES[$key];
         $post_file_access_arr = [];
         if (!is_array($file_post_arr['name'])) {
-            return [self::createObjFromArray($file_post_arr)];
+            $obj = new self($key);
+            return [$obj];
         }
 
         $file_count = count($file_post_arr['name']);
@@ -79,34 +104,36 @@ class POSTFileAccess
             foreach ($file_keys as $key) {
                 $file_arr[$key] = $file_post_arr[$key][$i];
             }
-            $post_file_access_arr[] = self::createObjFromArray($file_arr);
+
+            $obj = new self(null);
+            $obj->loadObjFromArray($file_arr);
+
+            $post_file_access_arr[] = $obj;
         }
 
         return $post_file_access_arr;
     }
 
-    protected static function createObjFromArray($array)
+
+    protected function loadObjFromArray($array)
     {
-        $obj = new self();
         \OLOG\Assert::assert(array_key_exists('name', $array));
-        $obj->setOriginalFileName($array['name']);
+        $this->setOriginalFileName($array['name']);
 
         \OLOG\Assert::assert(array_key_exists('size', $array));
-        $obj->setFileSize($array['size']);
+        $this->setFileSize($array['size']);
 
         \OLOG\Assert::assert(array_key_exists('type', $array));
-        $obj->setMimeType($array['type']);
+        $this->setMimeType($array['type']);
 
         \OLOG\Assert::assert(array_key_exists('tmp_name', $array));
-        $obj->setTempFilepath($array['tmp_name']);
+        $this->setTempFilepath($array['tmp_name']);
 
         \OLOG\Assert::assert(array_key_exists('error', $array));
-        $obj->setUploadErrorCode($array['error']);
+        $this->setUploadErrorCode($array['error']);
 
-        \OLOG\Assert::assert($obj->isOk(), self::$errorCodeMessages[$obj->getUploadErrorCode()]);
-        \OLOG\Assert::assert($obj->isUploadedFile(), 'The uploaded file was not sent with a POST request');
-
-        return $obj;
+        \OLOG\Assert::assert($this->isOk(), self::$errorCodeMessages[$this->getUploadErrorCode()]);
+        \OLOG\Assert::assert($this->isUploadedFile(), 'The uploaded file was not sent with a POST request');
     }
 
     public function getOriginalFileName()

@@ -36,7 +36,7 @@ namespace OLOG;
  *
  *
  * Если в post-форме ожидается массив файлов с ключем 'upload_files', можно получить массив объектов POSTFileAccess,
- * над которыми можно будет проводить все те же проверки и получать доступ к свойстам, что выше:
+ * над которыми можно будет проводить все те же проверки и получать доступ к свойствам, что выше:
  *
  * $file_arr = \OLOG\POSTFileAccess::getPOSTFileObjArr('upload_files');
  * foreach ($file_arr as $file_access_obj) {

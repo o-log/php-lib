@@ -10,8 +10,8 @@ namespace OLOG;
  * $file_access_obj = new \OLOG\POSTFileAccess('upload_file');
  *
  * Во время инициализации объекта для этого файла проверяются:
- *  -   не произолшло ли ошибок при закачке файла
- *  -   является ли этот файл загруженным
+ *      - не произошло ли ошибок при закачке файла
+ *      - является ли этот файл загруженным
  * в случае ошибки выбрасывается исключение.
  *
  *
@@ -27,7 +27,7 @@ namespace OLOG;
  *      echo $error_message;
  * }
  *
- * Доступ с свойставм загруженнго файла:
+ * Доступ с свойствам загруженного файла:
  *  $file_access_obj->getOriginalFileName();
  *  $file_access_obj->getMimeType();
  *  $file_access_obj->getTempFilepath();
@@ -35,7 +35,8 @@ namespace OLOG;
  *  $file_access_obj->getFileSize();
  *
  *
- * Если в форме ожидается массив файлов с ключем 'upload_files', получить массив объектов POSTFileAccess, над которыми можно будет проводить все те же проверки и получать доступ к свойстам, что выше:
+ * Если в post-форме ожидается массив файлов с ключем 'upload_files', можно получить массив объектов POSTFileAccess,
+ * над которыми можно будет проводить все те же проверки и получать доступ к свойстам, что выше:
  *
  * $file_arr = \OLOG\POSTFileAccess::getPOSTFileObjArr('upload_files');
  * foreach ($file_arr as $file_access_obj) {
@@ -47,6 +48,7 @@ namespace OLOG;
  *      $file_access_obj->getUploadErrorCode();
  *      $file_access_obj->getFileSize();
  * }
+ *
  */
 class POSTFileAccess
 {

@@ -6,6 +6,10 @@ class FullObjectId
 {
     static public function getFullObjectId($obj)
     {
+        if (is_null($obj)){
+            return null;
+        }
+
         if (!is_object($obj)) {
             return 'not_object';
         }

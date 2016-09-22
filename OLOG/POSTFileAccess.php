@@ -134,7 +134,11 @@ class POSTFileAccess
         \OLOG\Assert::assert(array_key_exists('error', $array));
         $this->setUploadErrorCode($array['error']);
 
-        \OLOG\Assert::assert($this->isOk(), self::$errorCodeMessages[$this->getUploadErrorCode()]);
+        $error_message = "unknown error code " . $this->getUploadErrorCode();
+        if(array_key_exists($this->getUploadErrorCode(), self::$errorCodeMessages)) {
+            $error_message = self::$errorCodeMessages[$this->getUploadErrorCode()];
+        }
+        \OLOG\Assert::assert($this->isOk(), $error_message);
         \OLOG\Assert::assert($this->isUploadedFile(), 'The uploaded file was not sent with a POST request');
     }
 

@@ -2,9 +2,9 @@
 
 namespace OLOG;
 
-class PreLoader
+class Preloader
 {
-	static public function getPreloaderJsHtml()
+	static public function preloaderJsHtml()
 	{
 		ob_start(); ?>
 		<script>

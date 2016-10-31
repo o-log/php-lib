@@ -2,13 +2,13 @@
 
 namespace OLOG;
 
-class PreLoader
+class Preloader
 {
-	static public function getPreLoader()
+	static public function preloaderJsHtml()
 	{
 		ob_start(); ?>
 		<script>
-			var PreLoader = {
+			var preloader = {
 				init: function () {
 					this.preloader = '\
 						<div id="preloader" style="z-index: 100000;position: fixed;top: 0;bottom: 0;left: 0;right: 0;display: none;background-color: rgba(255, 255, 255, 0.6);">\
@@ -35,7 +35,7 @@ class PreLoader
 					this.$preloader.show();
 				}
 			};
-			PreLoader.init();
+			preloader.init();
 		</script>
 		<?php
 		$html = ob_get_clean();

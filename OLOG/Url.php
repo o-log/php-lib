@@ -22,4 +22,16 @@ class Url
 
         return $url;
     }
+
+    static public function buildUrl()
+    {
+        $func_args_arr = func_get_args();
+        $func_args_arr = array_map(function($var) {
+            return trim($var, '/');
+        }, $func_args_arr);
+
+        $url =  implode($func_args_arr,'/');
+
+        return $url;
+    }
 }

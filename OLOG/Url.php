@@ -23,14 +23,13 @@ class Url
         return $url;
     }
 
-    static public function buildUrl()
+    static public function buildUrl($url_parts_arr)
     {
-        $func_args_arr = func_get_args();
-        $func_args_arr = array_map(function($var) {
+        $url_parts_arr = array_map(function($var) {
             return trim($var, '/');
-        }, $func_args_arr);
+        }, $url_parts_arr);
 
-        $url =  implode($func_args_arr,'/');
+        $url =  implode($url_parts_arr,'/');
 
         return $url;
     }

@@ -62,7 +62,7 @@ class JsonEditor
 				var OLOG = OLOG || {};
 				OLOG.jsoneditor = OLOG.jsoneditor || {
 						init: function () {
-							$(<?= $elem_id ?>).each(OLOG.jsoneditor.initJsonEditor);
+							$('<?= $elem_id ?>').each(OLOG.jsoneditor.initJsonEditor);
 						},
 
 						initJsonEditor: function () {
@@ -86,7 +86,9 @@ class JsonEditor
 							var editor = new JSONEditor($jsoneditor[0], options, json);
 						}
 					};
-				OLOG.jsoneditor.init();
+				$(function () {
+					OLOG.jsoneditor.init();
+				});
 			</script>
 			<?php
 			$html = ob_get_clean();

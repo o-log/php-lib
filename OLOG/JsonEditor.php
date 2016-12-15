@@ -67,7 +67,7 @@ class JsonEditor
 
 						initJsonEditor: function () {
 
-							var $this = $(this);
+							var $this = $(this).hide();
 							var $jsoneditor = $('<div>', {
 								style: 'height: 400px;'
 							});

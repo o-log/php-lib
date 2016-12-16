@@ -84,6 +84,10 @@ class JsonEditor
 							var json = JSON.parse($this.val());
 							// get json
 							var editor = new JSONEditor($jsoneditor[0], options, json);
+
+							$this.on('change', function () {
+				                                editor.set(JSON.parse($this.val()));
+                            				});
 						}
 					};
 				$(function () {

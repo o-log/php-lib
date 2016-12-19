@@ -40,7 +40,8 @@ class Assert
                 $message_arr[] = $request_uri;
             }
 
-            throw new \Exception(implode("\n", $message_arr));
+            // собираем все в одну строку, чтобы в мониторинг попали и файл с ошибкой, и адрес страницы
+            throw new \Exception(implode(" ", $message_arr));
         }
     }
 }

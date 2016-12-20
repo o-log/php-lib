@@ -52,7 +52,6 @@ class Preloader
 						},
 
 						hide: function () {
-							console.log(this.$preloader);
 							if (this.$container) {
 								if (this.container_style) {
 									this.$container.attr('style', this.container_style);

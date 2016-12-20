@@ -20,7 +20,7 @@ class Preloader
 				OLOG.preloader = OLOG.preloader || {
 						init: function () {
 							this.preloader = '\
-								<div id="preloader" style="z-index: 100000;position: fixed;top: 0;bottom: 0;left: 0;right: 0;display: none;background-color: rgba(255, 255, 255, 0.6);">\
+								<div id="preloader" style="z-index: 100000;position: fixed;top: 0;bottom: 0;left: 0;right: 0;background-color: rgba(255, 255, 255, 0.6);">\
 									<svg style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;display: block;width: 100px;height: 100px;margin: auto;" width="100px" height="100px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-ring-alt">\
 										<rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect>\
 										<circle cx="50" cy="50" r="40" stroke="rgba(0,0,0,0.5)" fill="none" stroke-width="10" stroke-linecap="round"></circle>\
@@ -31,19 +31,36 @@ class Preloader
 									</svg>\
 								</div>\
 							';
+						},
 
-							if ($('#preloader').length == 0) {
-								this.$preloader = $(this.preloader);
-								$('body').append(this.$preloader);
+						show: function ($container_obj) {
+							this.$preloader = $(this.preloader);
+
+							if (!$container_obj) {
+								$('body').prepend(this.$preloader.css('position', 'fixed'));
+							} else {
+								this.$container = $container_obj;
+								this.container_style = '';
+								if (this.$container.css('position') == 'static') {
+									if (this.$container.attr('style')) {
+										this.container_style = this.$container.attr('style');
+									}
+									this.$container.css('position', 'relative');
+								}
+								$container_obj.prepend(this.$preloader.css('position', 'absolute'));
 							}
 						},
 
 						hide: function () {
-							this.$preloader.hide();
-						},
-
-						show: function () {
-							this.$preloader.show();
+							console.log(this.$preloader);
+							if (this.$container) {
+								if (this.container_style) {
+									this.$container.attr('style', this.container_style);
+								} else {
+									this.$container.removeAttr('style');
+								}
+							}
+							this.$preloader.remove();
 						}
 					};
 				OLOG.preloader.init();

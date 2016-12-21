@@ -46,7 +46,7 @@ class IP
 
             foreach ($list as $ip) {
                 if (preg_match("/unknown/", $ip)) {
-                    return true;
+                    break;
                 }
 
                 if (self::ipIsInPrivateNetwork($ip)) {

@@ -40,7 +40,7 @@ class IP
     {
         $remote_addr = self::getClientIpRemoteAddr();
 
-        if (array_key_exists("HTTP_X_FORWARDED_FOR", $_SERVER) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+        if (array_key_exists("HTTP_X_FORWARDED_FOR", $_SERVER) && ($_SERVER['HTTP_X_FORWARDED_FOR'] != '')) {
             $list = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
             $list = array_map('trim', $list);
 

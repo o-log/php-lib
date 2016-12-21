@@ -40,20 +40,22 @@ class IP
     {
         $remote_addr = self::getClientIpRemoteAddr();
 
-        if (array_key_exists("HTTP_X_FORWARDED_FOR", $_SERVER) && ($_SERVER['HTTP_X_FORWARDED_FOR'] != '')) {
-            $list = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-            $list = array_map('trim', $list);
+        if (!array_key_exists("HTTP_X_FORWARDED_FOR", $_SERVER) || ($_SERVER['HTTP_X_FORWARDED_FOR'] == '')) {
+            return $remote_addr;
+        }
 
-            foreach ($list as $ip) {
-                if (preg_match("/unknown/", $ip)) {
-                    break;
-                }
+        $list = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        $list = array_map('trim', $list);
 
-                if (self::ipIsInPrivateNetwork($ip)) {
-                    break;
-                }
-                $remote_addr = $ip;
+        foreach ($list as $ip) {
+            if (preg_match("/unknown/", $ip)) {
+                break;
             }
+
+            if (self::ipIsInPrivateNetwork($ip)) {
+                break;
+            }
+            $remote_addr = $ip;
         }
 
         return $remote_addr;

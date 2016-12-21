@@ -6,48 +6,25 @@ namespace OLOG;
 
 class IP
 {
-    static public function isPrivateNetwork($ip)
+    /**
+     * https://tools.ietf.org/html/rfc6890#section-2.2.2
+     * Следующие диапазоны определены IANA как адреса, выделенные локальным сетям:
+     * - 10.0.0.0 — 10.255.255.255 (маска подсети для бесклассовой (CIDR) адресации: 255.0.0.0 или /8)
+     * - 172.16.0.0 — 172.31.255.255 (маска подсети для бесклассовой (CIDR) адресации: 255.240.0.0 или /12)
+     * - 192.168.0.0 — 192.168.255.255 (маска подсети для бесклассовой (CIDR) адресации: 255.255.0.0 или /16)
+     * Также для петлевых интерфейсов (не используется для обмена между узлами сети) зарезервирован диапазон 127.0.0.0 — 127.255.255.255 (маска подсети для бесклассовой (CIDR) адресации: 255.0.0.0 или /8)
+     *
+     * @param $ip
+     * @return bool
+     */
+    static public function ipIsInPrivateNetwork($ip)
     {
-        if (preg_match("/unknown/", $ip))
-            return true;
-        if (preg_match("/127\.0\./", $ip))
-            return true;
-        if (preg_match("/^192\.168\./", $ip))
-            return true;
-        if (preg_match("/^10\./", $ip))
-            return true;
-        if (preg_match("/^172\.16\./", $ip))
-            return true;
-        if (preg_match("/^172\.17\./", $ip))
-            return true;
-        if (preg_match("/^172\.18\./", $ip))
-            return true;
-        if (preg_match("/^172\.19\./", $ip))
-            return true;
-        if (preg_match("/^172\.20\./", $ip))
-            return true;
-        if (preg_match("/^172\.21\./", $ip))
-            return true;
-        if (preg_match("/^172\.22\./", $ip))
-            return true;
-        if (preg_match("/^172\.23\./", $ip))
-            return true;
-        if (preg_match("/^172\.24\./", $ip))
-            return true;
-        if (preg_match("/^172\.25\./", $ip))
-            return true;
-        if (preg_match("/^172\.26\./", $ip))
-            return true;
-        if (preg_match("/^172\.27\./", $ip))
-            return true;
-        if (preg_match("/^172\.28\./", $ip))
-            return true;
-        if (preg_match("/^172\.29\./", $ip))
-            return true;
-        if (preg_match("/^172\.30\./", $ip))
-            return true;
-        if (preg_match("/^172\.31\./", $ip))
-            return true;
+        $private_network_classes_arr = ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', '127.0.0.0/8'];
+        foreach ($private_network_classes_arr as $network) {
+            if (self::checkIPmatchNetOrIP($ip, $network)) {
+                return true;
+            }
+        }
 
         return false;
     }
@@ -68,7 +45,11 @@ class IP
             $list = array_map('trim', $list);
 
             foreach ($list as $ip) {
-                if (self::isPrivateNetwork($ip)) {
+                if (preg_match("/unknown/", $ip)) {
+                    return true;
+                }
+
+                if (self::ipIsInPrivateNetwork($ip)) {
                     break;
                 }
                 $remote_addr = $ip;

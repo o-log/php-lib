@@ -19,6 +19,10 @@ class CheckClassInterfaces
 
     static public function classImplementsInterface($class_name, $interface_class_name)
     {
+        if ($class_name == ''){
+            return false;
+        }
+
         $model_class_interfaces_arr = class_implements($class_name);
 
         if (array_key_exists($interface_class_name, $model_class_interfaces_arr)){

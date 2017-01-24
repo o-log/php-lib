@@ -78,8 +78,8 @@ class Popup
                     };
 
                     this.hide = function (callback) {
-                        if (popup_this.$popup_box != '') {
-                            return false;
+                        if (popup_this.$popup_box == '') {
+                            return;
                         }
 
                         $(window).trigger('popup.beforeHide');

@@ -4,7 +4,7 @@ namespace OLOG;
 
 class Popup
 {
-    static public function popupJsHtml($namespase = 'OLOG')
+    static public function popupJsHtml($namespace = 'OLOG')
     {
         static $include_script;
 
@@ -16,8 +16,8 @@ class Popup
 
             ob_start(); ?>
 			<script>
-                var <?= $namespase ?> = <?= $namespase ?> || {};
-                <?= $namespase ?>.popup = new function () {
+                var <?= $namespace ?> = <?= $namespace ?> || {};
+                <?= $namespace ?>.popup = new function () {
                     var popup_this = this;
 
                     this.conf = {

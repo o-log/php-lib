@@ -30,6 +30,7 @@ class Popup
                     };
 
                     this.$popup_box = '';
+                    this.$popup_content = '';
 
                     this.show = function (content_obj, callback) {
                         if (popup_this.$popup_box != '') {
@@ -42,14 +43,14 @@ class Popup
                             var content_obj = $(content_obj);
                         }
 
-                        var $content = $('<div>', {
+                        popup_this.$popup_content = $('<div>', {
                             class: popup_this.conf.content_class,
                             html: $.merge(popup_this.closeBtn(), content_obj)
                         });
 
                         var $wrapper = $('<div>', {
                             class: popup_this.conf.wrapper_class,
-                            html: $content
+                            html: popup_this.$popup_content
                         });
 
                         popup_this.$popup_box = $('<div>', {
@@ -60,7 +61,7 @@ class Popup
 
                         popup_this.$popup_box.appendTo('body');
 
-                        popup_this.$popup_box.find($content).on('click', function (e) {
+                        popup_this.$popup_box.find(popup_this.$popup_content).on('click', function (e) {
                             e.stopPropagation();
                         });
 
@@ -87,6 +88,7 @@ class Popup
                         $('html').removeClass('popup-show');
                         popup_this.$popup_box.remove();
                         popup_this.$popup_box = '';
+                        popup_this.$popup_content = '';
 
                         if (callback) {
                             callback();

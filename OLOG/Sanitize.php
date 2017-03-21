@@ -18,7 +18,7 @@ class Sanitize
 
     static public function sanitizeAttrValue($value)
     {
-        return htmlspecialchars($value);
+        return htmlspecialchars($value, ENT_QUOTES | ENT_HTML5);
     }
 
     static public function sanitizeSqlColumnName($column_name){

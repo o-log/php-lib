@@ -19,13 +19,13 @@ class Redirects
 
     static public function redirectToSelfNoGetForm()
     {
-        header('Location: ' . Url::getCurrentUrlNoGetForm());
+        header('Location: ' . Url::path());
         exit;
     }
 
     static public function redirectToSelf()
     {
-        header('Location: ' . Url::getCurrentUrl());
+        header('Location: ' . Url::current());
         exit;
     }
 }

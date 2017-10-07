@@ -11,7 +11,7 @@ class Render
      * @param array $variables ассоциативный массив переменных, которые будут переданы в шаблон
      * @return string
      */
-    public static function callLocaltemplate($template_file, $variables = array())
+    public static function local($template_file, $variables = array())
     {
         //
         // находим шаблон

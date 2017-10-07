@@ -2,7 +2,6 @@
 
 namespace OLOG;
 
-
 class HHMMSS
 {
     public static function hhmmss2seconds($hhmmss_str)

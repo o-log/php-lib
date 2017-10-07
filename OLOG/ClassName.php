@@ -2,22 +2,28 @@
 
 namespace OLOG;
 
-class CheckClassInterfaces
+class ClassName
 {
     /**
      * @param $class_name string Имя класса.
      * @param $interface_class_name string Имя интерфейса
      * @throws \Exception
      */
-    static public function exceptionIfClassNotImplementsInterface($class_name, $interface_class_name)
+    static public function exceptionIfNot($class_name, $interface_class_name)
     {
         Assert::assert(
-            self::classImplementsInterface($class_name, $interface_class_name),
+            self::is($class_name, $interface_class_name),
             'Class ' . $class_name . ' does not implement interface ' . $interface_class_name
         );
     }
 
-    static public function classImplementsInterface($class_name, $interface_class_name)
+    /**
+     * Проверяет, реализует ли класс интерфейс по имени класса.
+     * @param $class_name string Имя класса.
+     * @param $interface_class_name string Имя интерфейса
+     * @return boolean
+     */
+    static public function is($class_name, $interface_class_name)
     {
         if ($class_name == ''){
             return false;

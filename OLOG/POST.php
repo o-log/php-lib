@@ -2,9 +2,9 @@
 
 namespace OLOG;
 
-class POSTAccess
+class POST
 {
-    static public function getRequiredPostValue($key)
+    static public function required($key)
     {
         $value = '';
 
@@ -12,12 +12,12 @@ class POSTAccess
             $value = $_POST[$key];
         }
 
-        \OLOG\Assert::assert($value != '', 'Missing required POST field ' . $key); // TODO: library used while not mentioned in config
+        \OLOG\Assert::assert($value != '', 'Missing required POST field ' . $key);
 
         return $value;
     }
 
-    static public function getOptionalPostValue($key, $default = '')
+    static public function optional($key, $default = '')
     {
         $value = '';
 

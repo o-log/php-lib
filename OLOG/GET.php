@@ -2,10 +2,9 @@
 
 namespace OLOG;
 
-class GETAccess
-{
-    static public function getRequiredGetValue($key)
-    {
+class GET {
+
+    static public function required($key) {
         $value = '';
 
         if (array_key_exists($key, $_GET)) {
@@ -17,8 +16,7 @@ class GETAccess
         return $value;
     }
 
-    static public function getOptionalGetValue($key, $default = '')
-    {
+    static public function optional($key, $default = '') {
         $value = '';
 
         if (array_key_exists($key, $_GET)) {
